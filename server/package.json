@@ -8,7 +8,7 @@
     "server": "nodemon index.js",
    "build":"npm install "
   },
-  "author": "Subhash Thenua",
+  "author": "Muskan Gupta",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",

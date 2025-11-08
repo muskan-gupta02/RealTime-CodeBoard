@@ -131,7 +131,7 @@ function EditorPage() {
 
         {/* Editor panel */}
         <div className="col-md-10 text-light d-flex flex-column h-100 ">
-          <h2 class="text-center text-white bg-dark py-3 ">Code Editor By Kush 🤖</h2>
+          <h2 class="text-center text-white bg-dark py-3 ">Code Editor 🤖</h2>
           <Editor
             socketRef={socketRef}
             roomId={roomId}

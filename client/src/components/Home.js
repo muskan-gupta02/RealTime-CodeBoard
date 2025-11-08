@@ -40,7 +40,7 @@ function Home() {
 
   return (
     <div className="container-fluid">
-    <h2 class="text-center text-white bg-dark py-3 ">Code Editor By Subhash 🤖</h2>
+    <h2 class="text-center text-white bg-dark py-3 ">Code Board 🤖</h2>
       <div className="row justify-content-center align-items-center min-vh-100">
         <div className="col-12 col-md-6">
           <div className="card shadow-sm p-2 mb-5 bg-secondary rounded">
