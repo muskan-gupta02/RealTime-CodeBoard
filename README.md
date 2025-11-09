@@ -23,7 +23,7 @@ Code Editor For Interviews  is a real-time code collaboration web application th
 
 ## Usage
 
-1. Open the live demo at https://real-time-code-editor-for-interviews.onrender.com
+1. Open the live demo at https://realtime-codeboard-1.onrender.com/
 2. Enter a Room ID or generate a new one.
 3. Set your username.
 4. Start collaborating with others in the same room.
