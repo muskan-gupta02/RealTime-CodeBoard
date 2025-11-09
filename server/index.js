@@ -4,35 +4,41 @@ const http = require("http");
 const { Server } = require("socket.io");
 const ACTIONS = require("./Actions");
 const path = require("path");
+const cors = require("cors");
+
+// ✅ Enable CORS for REST routes or APIs
+app.use(cors());
+
 
 const server = http.createServer(app);
-// const dirname=path.resolve();
-// app.use(express.static(path.join(dirname,'./client/build')))
-// app.get('*',function(req,res){
-//   res.sendFile(path.join(dirname,'./client/build/index.html'))
-// })
 
-const io = new Server(server);
+// ✅ Setup Socket.io with CORS (important for Render)
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL || "http://localhost:3000", // frontend domain
+    methods: ["GET", "POST"],
+  },
+});
 
 const userSocketMap = {};
+
 const getAllConnectedClients = (roomId) => {
   return Array.from(io.sockets.adapter.rooms.get(roomId) || []).map(
-    (socketId) => {
-      return {
-        socketId,
-        username: userSocketMap[socketId],
-      };
-    }
+    (socketId) => ({
+      socketId,
+      username: userSocketMap[socketId],
+    })
   );
 };
 
+// ✅ Socket.io logic
 io.on("connection", (socket) => {
-  // console.log('Socket connected', socket.id);
   socket.on(ACTIONS.JOIN, ({ roomId, username }) => {
     userSocketMap[socket.id] = username;
     socket.join(roomId);
     const clients = getAllConnectedClients(roomId);
-    // notify that new user join
+
+    // Notify all users that a new user has joined
     clients.forEach(({ socketId }) => {
       io.to(socketId).emit(ACTIONS.JOINED, {
         clients,
@@ -42,19 +48,19 @@ io.on("connection", (socket) => {
     });
   });
 
-  // sync the code
+  // Sync code between users
   socket.on(ACTIONS.CODE_CHANGE, ({ roomId, code }) => {
     socket.in(roomId).emit(ACTIONS.CODE_CHANGE, { code });
   });
-  // when new user join the room all the code which are there are also shows on that persons editor
+
+  // When a new user joins, sync existing code to them
   socket.on(ACTIONS.SYNC_CODE, ({ socketId, code }) => {
     io.to(socketId).emit(ACTIONS.CODE_CHANGE, { code });
   });
 
-  // leave room
+  // Handle user disconnecting
   socket.on("disconnecting", () => {
     const rooms = [...socket.rooms];
-    // leave all the room
     rooms.forEach((roomId) => {
       socket.in(roomId).emit(ACTIONS.DISCONNECTED, {
         socketId: socket.id,
@@ -67,5 +73,6 @@ io.on("connection", (socket) => {
   });
 });
 
+
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server is runnint on port ${PORT}`));
+server.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
