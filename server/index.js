@@ -12,13 +12,14 @@ app.use(cors());
 
 const server = http.createServer(app);
 
-// ✅ Setup Socket.io with CORS (important for Render)
+// ✅ Setup Socket.io with CORS
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:3000", // frontend domain
+    origin: ["https://realtime-codeboard-1.onrender.com"],
     methods: ["GET", "POST"],
   },
 });
+
 
 const userSocketMap = {};
 
